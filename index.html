@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>单词复习助手</title>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>单词复习助手</h1>
+            <nav class="nav-bar">
+                <button onclick="switchPage('review')" class="nav-btn active">复习</button>
+                <button onclick="switchPage('wordbank')" class="nav-btn">单词库</button>
+                <button onclick="switchPage('mistakes')" class="nav-btn">错题本</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 文件上传区域 -->
+        <div class="upload-section">
+            <input type="file" id="fileInput" accept=".xlsx,.xls">
+            <button onclick="loadExcel()">导入Excel</button>
+        </div>
+
+        <!-- 单词展示区域 -->
+        <div class="word-section">
+            <div id="review-start" class="center">
+                <h2>开始复习</h2>
+                <p class="subtitle">导入Excel文件后点击开始按钮开始复习</p>
+                <button onclick="showFilterAndStart()" class="start-btn">开始复习</button>
+            </div>
+            
+            <!-- 筛选区域 -->
+            <div id="filter-section" class="filter-section" style="display: none;">
+                <h3>选择要复习的单词范围</h3>
+                <div class="filter-controls">
+                    <select id="sourceFilter">
+                        <option value="">按来源筛选</option>
+                    </select>
+                    <select id="dateFilter">
+                        <option value="">按日期筛选</option>
+                    </select>
+                    <select id="letterFilter">
+                        <option value="">按首字母筛选</option>
+                    </select>
+                    <button onclick="startReview()" class="primary-btn">开始</button>
+                </div>
+            </div>
+
+            <!-- 单词卡片区域 -->
+            <div id="word-card" class="word-card" style="display: none;">
+                <div class="card-header">
+                    <div class="progress-container">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                    <p id="progress" class="progress-text">进度：0/0</p>
+                    <div class="exit-button">
+                        <button onclick="exitReview()">退出��习</button>
+                    </div>
+                </div>
+                
+                <div class="card-content">
+                    <h2 id="currentWord" class="word-text">请导入单词</h2>
+                    <div class="word-details hidden" id="word-details">
+                        <p id="meaning">释义将在这里显示</p>
+                        <p id="note">备注将在这里显示</p>
+                        <p id="source">来源将在这里显示</p>
+                        <p id="date">日期将在这里显示</p>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="handleKnown()" class="known-btn">认识</button>
+                    <button onclick="handleUnknown()" class="unknown-btn">不认识</button>
+                    <button onclick="toggleMeaning()" class="toggle-btn">显示释义</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改单词库部分 -->
+        <div id="wordbank-section" class="page-section" style="display: none;">
+            <h2>单词库</h2>
+            <div class="filter-section">
+                <select id="wordbank-sourceFilter">
+                    <option value="">按来源筛选</option>
+                </select>
+                <select id="wordbank-dateFilter">
+                    <option value="">按日期筛选</option>
+                </select>
+                <select id="wordbank-letterFilter">
+                    <option value="">按首字母筛选</option>
+                </select>
+                <button onclick="filterWordBank()">筛选</button>
+            </div>
+            <div class="table-container">
+                <table id="wordbank-table">
+                    <thead>
+                        <tr>
+                            <th>单词</th>
+                            <th>释义</th>
+                            <th>备注</th>
+                            <th>来源</th>
+                            <th>日期</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 修改错题本部分 -->
+        <div id="mistakes-section" class="page-section" style="display: none;">
+            <h2>错题本</h2>
+            <div class="filter-section">
+                <select id="mistakes-sourceFilter">
+                    <option value="">按来源筛选</option>
+                </select>
+                <select id="mistakes-dateFilter">
+                    <option value="">按日期筛选</option>
+                </select>
+                <select id="mistakes-letterFilter">
+                    <option value="">按首字母筛选</option>
+                </select>
+                <button onclick="filterMistakes()">筛选</button>
+            </div>
+            <div class="table-container">
+                <table id="mistakes-table">
+                    <thead>
+                        <tr>
+                            <th>单词</th>
+                            <th>释义</th>
+                            <th>备注</th>
+                            <th>来源</th>
+                            <th>日期</th>
+                            <th>错误次数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 单词复习助手</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html> 
